@@ -11,7 +11,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $num = 8;
+        $data = null;
+        $vacia = 'hola';
+        $nombres = ['Edgar', 'Roberto', 'Jorge'];
+        return view('directives', compact('num', 'data', 'vacia', 'nombres'));
     }
 
     /**

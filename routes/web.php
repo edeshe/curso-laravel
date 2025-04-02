@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
+use App\Http\Middleware\Suscribed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,23 +18,23 @@ Route::get('/hola', function () {
     return route('hola');
 })->name('hola');
 
-// Route::get('/suma', function () {
-//     $x = 10;
-//     $y = 20;
-//     return 'La suma es: ' . $x + $y;
-// })->name('plus');
-
-Route::get('/suma', [CursoController::class, 'getSuma'])->name('plus');
-
-Route::get('/suma/{x}/{y}', function ($x, $y) {
+Route::get('/suma', function () {
+    $x = 10;
+    $y = 20;
     return 'La suma es: ' . $x + $y;
 })->name('suma');
 
-Route::get('/suma_exp/{x}/{y}', function($x, $y){
-    $a = [1, 2, 3, 4];
-    $aa = ['nombre' => 'Edgar', 'apellido' => 'Espino'];
-    return 'La suma es ' . ($x + $y); 
-})->where(['x' => '[0-9]+','y' => '[0-9]+'])->name('suma2');
+// Route::get('/suma', [CursoController::class, 'getSuma'])->name('plus');
+
+// Route::get('/suma/{x}/{y}', function ($x, $y) {
+//     return 'La suma es: ' . $x + $y;
+// })->name('suma');
+
+// Route::get('/suma_exp/{x}/{y}', function($x, $y){
+//     $a = [1, 2, 3, 4];
+//     $aa = ['nombre' => 'Edgar', 'apellido' => 'Espino'];
+//     return 'La suma es ' . ($x + $y); 
+// })->where(['x' => '[0-9]+','y' => '[0-9]+'])->name('suma2');
 
 Route::get('/nombre/{name?}', function ($name = 'Edgar') { // Parámetro opcional
     return 'Mi nombre es: ' . $name;
@@ -38,28 +42,64 @@ Route::get('/nombre/{name?}', function ($name = 'Edgar') { // Parámetro opciona
 
 // 301 - permanente
 // 302 - temporal - defecto
-Route::redirect('/sumar', '/nombre');
+// Route::redirect('/sumar', '/nombre');
 
-Route::get('/verificar', function (Request $request) {
-    if($request->route()->named('verificar')){
-        return 'OK';
-    } else{
-        return 'Verificar...';
-    }
-})->name('verificar');
+// Route::get('/verificar', function (Request $request) {
+//     if($request->route()->named('verificar')){
+//         return 'OK';
+//     } else{
+//         return 'Verificar...';
+//     }
+// })->name('verificar');
 
-Route::prefix('admin')->group(function(){
-    Route::get('/primer', function(){
-        return 'primer...';
-    })->name('admin.primer');
-    Route::get('/segundo', function(){
-        return 'segundo...';
-    })->name('admin.segundo');
-});
+// Route::prefix('admin')->group(function(){
+//     Route::get('/primer', function(){
+//         return 'primer...';
+//     })->name('admin.primer');
+//     Route::get('/segundo', function(){
+//         return 'segundo...';
+//     })->name('admin.segundo');
+// });
 
 Route::prefix('math')->group(function(){
     Route::get('/suma/{x}/{y}', [CursoController::class, 'getSuma'])->name('plus');
     Route::get('/resta/{x}/{y}', [CursoController::class, 'getResta'])->name('minus');
     Route::get('/multiplica/{x}/{y}', [CursoController::class, 'getMultiplica'])->name('multiply');
     Route::get('/divide/{x}/{y}', [CursoController::class, 'getDivide'])->name('divide');
+});
+
+Route::resource('users', AdminUserController::class)->parameters([
+    'users' => 'admin_user'
+]);
+
+// Se tiene que registrar antes de usarlo
+Route::get('suscribed', function(){
+    return 'Bienvenido suscrito';
+// })->middleware(Suscribed::class); // middleware de clase
+})->middleware('suscribed'); // middleware por alias, se registra en bootstrap > app
+
+// Mostrar vistas
+// Así:
+
+// Route::view('ejemplo', 'example', ['nombre' => 'Edgar'])->name('example');
+
+// o así:
+
+Route::get('/ejemplo', function () {
+    return view('example', ['nombre' => 'Edgar Espino']);
+});
+
+Route::get('/plantilla', [CursoController::class, 'index'])->name('curso.index');
+
+Route::view('mostrar', 'display', ['message' => '<p>Esto es un parafo en message</p>'])->name('display');
+
+Route::get('directivas', [UserController::class, 'index'])->name('directivas');
+
+Route::view('incluir', 'incluir');
+
+Route::controller(PostController::class)->group(function (){
+    Route::get('/posts', 'index')->name('posts.index');
+    Route::get('/posts/create', 'create')->name('posts.create');
+    Route::post('posts', 'store')->name('posts.store');
+    Route::get('/posts/show', 'show')->name('posts.show');
 });

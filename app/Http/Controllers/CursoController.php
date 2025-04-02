@@ -51,4 +51,22 @@ class CursoController extends Controller
     public function dividir($x, $y){
         return $x / $y;
     }
+
+    public function index(){
+        $nombre = 'Edgar';
+        $last = 'Espino';
+        $age = 47;
+        // return view('layout.child', [
+        //     'nombre' => $nombre, 
+        //     'last' => $last, 
+        //     'age' => $age,
+        // ]);
+
+        return view('layout.child', compact('nombre', 'last', 'age'));
+
+        // return view('layout.child')->with('nombre', $nombre)
+        // ->with('last', $last)
+        // ->with('age', $age);
+
+    }
 }

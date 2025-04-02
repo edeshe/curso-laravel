@@ -9,7 +9,18 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-
+        <style>
+            .my-class{
+                color: #f00;
+            }
+            .alert-title{
+                color: orangered;
+                font-size: 20px;
+            }
+            .class-anonima{
+                color: blue;
+            }
+        </style>
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -54,8 +65,22 @@
                 <div class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
                     <h1 class="mb-1 font-medium">Let's get started {{$name}}</h1>
                     <div>{{route('hola')}}</div>
-                    <div>{{route('plus')}}</div>
-                    <div>{{route('suma', ['x' => 20, 'y' => 30])}}</div>
+                    <div>{{url('math/plus')}}</div>
+                    <div>{{route('suma')}}</div>
+                    <div>
+                        <x-alert type="error" :name="$name" class="my-class" data-iditem="123">
+                            <x-slot:title>
+                                Server Error
+                            </x-slot>
+                            <h1><strong>Whoops!</strong> Este es mi slot de alert!</h1>
+                        </x-alert>
+                    </div>
+                    <div>
+                        <x-alert2>
+                            <div> The best way to take care of the future is to take care of the present moment. - Thich Nhat Hanh </div>
+                        </x-alert2>
+                    </div>
+                    <x-anonimo type="error" :name="$name" class="class-anonima" />
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">Laravel has an incredibly rich ecosystem. <br>Sugerimos iniciar con lo siguiente.</p>
                     <ul class="flex flex-col mb-4 lg:mb-6">
                         <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
