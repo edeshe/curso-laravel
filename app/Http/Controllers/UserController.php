@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -31,7 +34,34 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /* DB::table('users')->insert([
+            'name' => 'Edgar',
+            'lastname' => 'Espino',
+            'email' => 'edeshe77@gmail.com',
+            'phone' => '+5299999999',
+            // 'password' => Hash::make('123456'),
+            'password' => '123456'
+        ]); */
+
+        /* $user = new User();
+        $user->name = 'Fulanito';
+        $user->lastname = 'Salas';
+        $user->email = 'fulanito@gmail.com';
+        $user->phone = '+527223712000';
+        $user->password = Hash::make('123456');
+        $user->save(); */
+
+        /* $dato = [
+            'name' => 'Edgar',
+            'lastname' => 'Espino',
+            'email' => 'edeshe77@gmail.com',
+            'phone' => '+5299999999',
+            'password' => Hash::make('123456'),
+            // 'password' => '123456'
+        ];
+        User::create($dato); */
+        dd($request->all());
+        return "Guardado...";
     }
 
     /**
@@ -55,7 +85,18 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        /* DB::table('users')->where('id', $id)->update([
+            'name' => 'Jose',
+            'lastname' => 'Salas',
+        ]); */
+
+        $user = User::find($id);
+        $user->name = 'Fulanita';
+        $user->lastname = 'de Menganito';
+        // $user->password = Hash::make('123456');
+        $user->save();
+
+        return "Actualizado...";
     }
 
     /**
@@ -63,6 +104,26 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // DB::table('users')->where('id', $id)->delete();
+
+        $user = User::find($id);
+        $user->delete();
+
+        return "Eliminado...";
+    }
+
+    public function data()
+    {
+        // $users = DB::select('select * from users'); // SQL
+        // $users = DB::table('users')->get(); // Query builder
+        $users = User::all(); // Eloquend
+        // Consultar un solo registro
+        // $user = DB::select('select * from users where id=?', [1]); // SQL
+        // $users = DB::table('users')->where('name', 'lastname')->get(); // Query builder
+        // $user = User::find(2); // Eloquend
+
+        
+        // dd($users);
+        return view("data", compact('users'));
     }
 }

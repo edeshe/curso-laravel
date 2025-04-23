@@ -5,7 +5,10 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Middleware\Suscribed;
+use App\Models\Phone;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /* Route::get('/', function () {
@@ -102,4 +105,40 @@ Route::controller(PostController::class)->group(function (){
     Route::get('/posts/create', 'create')->name('posts.create');
     Route::post('posts', 'store')->name('posts.store');
     Route::get('/posts/show', 'show')->name('posts.show');
+});
+
+Route::get('datos', [UserController::class, 'data']);
+Route::get('guardar', [UserController::class, 'store']);
+Route::get('actualizar/{id}', [UserController::class, 'update']);
+Route::get('borrar/{id}', [UserController::class, 'destroy']);
+
+Route::get('form', function () {
+    return view('form');
+});
+Route::put('guardar', [UserController::class, 'store'])->name('save');
+
+Route::get('prueba', function () {
+    /* User::create([
+        'name' => 'Edgar',
+        'lastname' => 'E.',
+        'email' => 'prueba@gmail.com',
+        'phone' => '9999999999',
+        'password' => Hash::make('12345678'),
+    ]); */
+    /* Phone::create([
+        'number' => '9999999999',
+        'user_id' => 14,
+    ]); */
+    // return 'OK... registro guardado';
+    // $user = User::find(14);
+
+    // $user = User::where('id', 14)->with('phone')->first();
+    
+    // $user = Phone::where('user_id', 14)->with('user')->first();
+
+    $user = Phone::find(1);
+    
+    // $user = User::find(14)->phone;
+    return $user;
+    // return $user->phone;
 });
